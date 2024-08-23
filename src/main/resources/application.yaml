@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: spring-boot-template
+    jackson:
+      property-naming-strategy: SNAKE_CASE
+    flyway:
+      locations: classpath:/db/migration
+      schemas: employee
+      baselineOnMigrate: true
+      enabled: true

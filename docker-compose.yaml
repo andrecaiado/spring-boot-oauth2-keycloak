@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:16.3-alpine'
+    environment:
+      - 'POSTGRES_DB=spring-boot-template'
+      - 'POSTGRES_PASSWORD=postgres'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432:5432'
