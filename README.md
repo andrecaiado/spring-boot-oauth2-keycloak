@@ -19,8 +19,7 @@ A Spring Boot demo project that provides authentication and authorization throug
 
 # Requirements
 
-- Java 21
-- Maven
+- Java 17
 - Docker
 - Docker Compose
 
@@ -45,13 +44,13 @@ cd your-repository-name
 3. Install the dependencies by executing the following command:
 
 ```shell
-mvn clean install
+./mvnw clean install
 ```
 
 4. Run the application by executing the following command:
 
 ```shell 
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
 ## Accessing and managing Keycloak
