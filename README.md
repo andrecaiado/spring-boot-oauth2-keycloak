@@ -1,50 +1,65 @@
-# Spring Boot Template project
-This is a template project for Spring Boot applications. 
+# Spring Boot oAuth2 and Keycloak project
 
-## Features
-- Exposes an API to perform CRUD operations on a single entity
-- Persists the data in a PostgreSQL database
-- Uses Spring Data JPA for database operations
-- Uses Flyway for database migrations
-- Uses Spring Boot Docker Compose to start and stop a Docker container running the PostgreSQL database
-- Includes a datasource configuration for testing purposes that uses the H2 in-memory database
+A Spring Boot demo project that provides authentication and authorization through a Keycloak server.
 
-### PostgreSQL database
-The PostrgreSQL configuration is located in `src/main/resources/application.yaml`. 
+# Table of Contents
 
-The datasource configuration is located in the `docker-compose.yml` file so it can be picked up by Spring Boot Docker Compose.
+- [Features](#features)
+- [Requirements](#requirements)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Accessing and managing Keycloak](#accessing-and-managing-keycloak)
 
-### Database migrations with Flyway
-Flyway configuration is located in `src/main/resources/application.yaml`.
+# Features
+- Installs and configures a Keycloak server
+- Configures a Spring Boot application to use the Keycloak server for authentication and authorization
+- Provides a REST API to authenticate and authorize users
+- Provides a REST API to access a protected resource
+- Provides a REST API to refresh the access token
 
-The migration files are located at `src/main/resources/db/migration`.
+# Requirements
 
-### Spring Boot Docker Compose
-With Spring Boot Docker Compose, the container running the PostgreSQL database will be automatically started when the application is started and stopped when the application is stopped.
+- Java 21
+- Maven
+- Docker
+- Docker Compose
 
-Spring Boot Docker Compose will detect and use the `docker-compose.yml` file located in the root of the project. 
+# Getting Started
 
-The data source will be configured with the properties defined in the `docker-compose.yml` file.
+This section provides a step-by-step guide on how to run the project.
 
-### In-memory database for testing
-The datasource configuration is located in `src/test/resources/application.yaml`.
+## Installation
 
-When a test loads the application context or explicitly calls this configuration, the H2 in-memory database will be initialized.
+1. Clone the repository by executing the following command:
 
-The migrations will be applied from the files located at `src/main/resources/db/migration`. To apply a different migration to the test database, create the migration files in the `scr/test/resources` and specify the configuration in the `scr/test/resources/application.yaml` file.
-
-```yaml
-spring:
-  application:
-      flyway:
-        locations: classpath:/db/migration
-        schemas: employees
-        baselineOnMigrate: true
-        enabled: true
+```shell
+git clone git@github.com:andrecaiado/spring-boot-oauth2-keycloak.git
 ```
 
-### Running the application
-To run the application, execute the following command:
+2. Navigate into the project directory:
+
+```
+cd your-repository-name
+```
+
+3. Install the dependencies by executing the following command:
+
+```shell
+mvn clean install
+```
+
+4. Run the application by executing the following command:
+
 ```shell 
 mvn spring-boot:run
 ```
+
+## Accessing and managing Keycloak
+
+When running the application, Keycloak will be available at `http://localhost:8080/auth`. The default credentials are:
+
+- Username: `admin`
+- Password: `admin`
+
+For more information on configuring Keycloak server, please refer to the [Keycloak Getting started guides](https://www.keycloak.org/guides).
+
