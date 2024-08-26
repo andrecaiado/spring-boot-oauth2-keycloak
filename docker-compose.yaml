@@ -14,7 +14,7 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.6
-    command: start
+    command: "-v start-dev --import-realm"
     environment:
       KC_HOSTNAME: localhost
       KC_HOSTNAME_PORT: 8080
@@ -35,6 +35,8 @@ services:
       - postgres
     networks:
       - keycloak_network
+    volumes:
+      - ./local-dev/sbok-dev-realm.json:/opt/keycloak/data/import/sbok-dev-realm.json
 
 volumes:
   postgres_data:
