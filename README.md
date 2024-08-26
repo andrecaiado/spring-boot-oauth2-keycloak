@@ -100,7 +100,7 @@ The configurations are the following:
 
 ## Importing the realm configuration
 
-To automatically import the realm configuration when the Keycloak server starts, the following configuration was added to the [docker-compose.yaml](docker-compose.yaml) file:
+To automatically import the realm configuration when the Keycloak server starts, the following configuration was added to the [docker-compose.yaml](local-dev/docker-compose.yaml) file:
 
 ```yaml
   keycloak:
@@ -108,7 +108,7 @@ To automatically import the realm configuration when the Keycloak server starts,
     command: "-v start-dev --import-realm"
     ...
     volumes:
-      - ./local-dev/sbok-dev-realm.json:/opt/keycloak/data/import/sbok-dev-realm.json
+      - ./sbok-dev-realm.json:/opt/keycloak/data/import/sbok-dev-realm.json
 ```
 
 ## Testing the authentication using a REST client

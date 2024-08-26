@@ -1,2 +1,7 @@
 server:
   port: 8081
+
+spring:
+  docker:
+    compose:
+      file: ./local-dev/docker-compose.yaml
