@@ -2,6 +2,8 @@ package com.example.springboottemplate.service;
 
 import com.example.springboottemplate.config.KeycloakProvider;
 import com.example.springboottemplate.dto.LoginRequestDto;
+import com.example.springboottemplate.dto.RefreshTokenRequestDto;
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.ws.rs.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.Keycloak;
@@ -31,6 +33,11 @@ public class AuthenticationService {
             log.warn("invalid account. User probably hasn't verified email.", ex);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(accessTokenResponse);
         }
+    }
+
+    public JsonNode refreshToken(RefreshTokenRequestDto refreshToken) {
+        Keycloak keycloak = keycloakProvider.getInstance();
+        return keycloakProvider.refreshToken(refreshToken);
     }
 
 }

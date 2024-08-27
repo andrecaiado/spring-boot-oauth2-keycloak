@@ -1,8 +1,11 @@
 package com.example.springboottemplate.controller;
 
 import com.example.springboottemplate.dto.LoginRequestDto;
+import com.example.springboottemplate.dto.RefreshTokenRequestDto;
 import com.example.springboottemplate.service.AuthenticationService;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.keycloak.representations.AccessTokenResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,5 +25,11 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<AccessTokenResponse> login(@RequestBody LoginRequestDto loginRequestDto) {
         return authenticationService.login(loginRequestDto);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JsonNode> refresh(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
+        JsonNode response = authenticationService.refreshToken(refreshTokenRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

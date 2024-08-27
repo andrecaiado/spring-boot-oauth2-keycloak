@@ -219,4 +219,14 @@ public class ProtectedResourceController {
 
 We need to implement a custom `JwtAuthenticationConverter` to extract the roles from the JWT token so the @PreAuthorize annotation can work properly.
 
+The roles are extracted from the `realm_access` and `resource_access` claims of the JWT token.
+
 The `JwtAuthenticationConverter` is defined in the [JwtAuthConverter.java](src%2Fmain%2Fjava%2Fcom%2Fexample%2Fspringboottemplate%2Fsecurity%2FJwtAuthConverter.java) class.
+
+# Endpoints and services
+
+The project provides the following endpoints:
+
+- `/api/v1/authenticate/login`: Authenticates a user and returns the access token
+- `/api/v1/authenticate/refresh`: Refreshes the access token
+- `/api/v1/user`: Returns the user information
