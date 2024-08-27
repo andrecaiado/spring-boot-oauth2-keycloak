@@ -1,7 +1,7 @@
 package com.example.springboottemplate.service;
 
+import com.example.springboottemplate.config.KeycloakProvider;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -11,15 +11,15 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class UserService {
 
-    @Value("${keycloak.url}")
-    private String serverUrl;
+    private final KeycloakProvider keycloakProvider;
 
-    @Value("${keycloak.realm}")
-    private String realm;
+    public UserService(KeycloakProvider keycloakProvider) {
+        this.keycloakProvider = keycloakProvider;
+    }
 
     public JsonNode getUserInfo(String bearerToken) {
 
-        String url = serverUrl + "/realms/" + realm + "/protocol/openid-connect/userinfo";
+        String url = keycloakProvider.getServerUrl() + "/realms/" + keycloakProvider.getRealm() + "/protocol/openid-connect/userinfo";
 
         RestTemplate restTemplate = new RestTemplate();
 

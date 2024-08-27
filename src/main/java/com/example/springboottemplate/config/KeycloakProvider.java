@@ -1,10 +1,12 @@
 package com.example.springboottemplate.config;
 
+import lombok.Getter;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+@Getter
 @Configuration
 public class KeycloakProvider {
 
