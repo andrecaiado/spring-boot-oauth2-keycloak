@@ -12,6 +12,11 @@ A Spring Boot demo project that provides authentication and authorization throug
 - [Keycloak Configuration](#keycloak-configuration)
   - [Importing the realm configuration](#importing-the-realm-configuration)
   - [Testing the authentication using a REST client](#testing-the-authentication-using-a-rest-client)
+- [Implementation](#implementation)
+  - [Security configuration](#security-configuration)
+  - [Role based authorization](#role-based-authorization)
+    - [Enable method security](#enable-method-security)
+    - [Extract roles from the JWT token](#extract-roles-from-the-jwt-token)
 
 # Features
 - Configures and runs a Keycloak server in a Docker container
@@ -117,7 +122,7 @@ Access the [OpenID Endpoint Configuration URL](http://localhost:8080/realms/sbok
 
 The above URL can be found at the [Realm settings](http://localhost:8080/admin/master/console/#/sbok-dev/realm-settings) page of the Keycloak server.
 
-The URL to authenticate users is the `token_endpoint` URL. In this project, it is http://localhost:8080/auth/realms/sbok-dev/protocol/openid-connect/token.
+The URL to authenticate users is the `token_endpoint` URL. In this project, it is http://localhost:8080/realms/sbok-dev/protocol/openid-connect/token.
 
 Create a POST request to the `token_endpoint` URL with the following parameters:
 
@@ -132,3 +137,86 @@ Create a POST request to the `token_endpoint` URL with the following parameters:
 The `client_secret` can be found at the client details page, in the credentials tab, of the Keycloak server.
 
 If the request is successful, the response will contain, among other fields, the `access_token`.
+
+# Implementation
+
+This section describes the implementation of the project focused on the integration with Keycloak.
+
+## Security configuration
+
+The security configuration is defined in the [SecurityConfig](src/main/java/com/andrecaiado/springboot/oauth2/keycloak/config/SecurityConfig.java) class.
+
+In the filter chain, we added the `oauth2ResourceServer` so Spring Boot knows what resource server to use in order to validate the JWT token that will be received in the requests.
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    ...
+    
+    http
+            .oauth2ResourceServer(oauth2ResourceServer ->
+                oauth2ResourceServer
+                    .jwt(Customizer.withDefaults())
+            );
+    ...
+    
+    return http.build();
+  }
+}
+```
+
+The resource server properties are defined in the [application.yml](src/main/resources/application.yml) file:
+
+```yaml
+spring:
+  security:
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri: http://localhost:8080/realms/sbok-dev
+        jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+```
+
+Once again, please refer to the [OpenID Endpoint Configuration URL](http://localhost:8080/realms/sbok-dev/.well-known/openid-configuration) to get the necessary URIs.
+
+## Role based authorization
+
+This section describes how to implement role-based authorization in the project.
+
+### Enable method security
+
+Enable the `@PreAutorize` annotation by adding the `@WebMethodSecurity` annotation in the [SecurityConfig](src/main/java/com/andrecaiado/springboot/oauth2/keycloak/config/SecurityConfig.java) class:
+
+```java
+@Configuration
+@EnableWebSecurity
+@EnableWebMethodSecurity
+public class SecurityConfig {
+  ...
+}
+```
+
+Add the `@PreAuthorize` annotation to the methods that need authorization:
+
+```java
+@RestController
+@RequestMapping("/api/v1")
+public class ProtectedResourceController {
+
+  @GetMapping("/protected")
+  @PreAuthorize("hasRole('admin')")
+  public ResponseEntity<String> getProtectedResource() {
+    return ResponseEntity.ok("This is a protected resource");
+  }
+}
+```
+
+### Extract roles from the JWT token
+
+We need to implement a custom `JwtAuthenticationConverter` to extract the roles from the JWT token so the @PreAuthorize annotation can work properly.
+
+The `JwtAuthenticationConverter` is defined in the [JwtAuthConverter.java](src%2Fmain%2Fjava%2Fcom%2Fexample%2Fspringboottemplate%2Fsecurity%2FJwtAuthConverter.java) class.

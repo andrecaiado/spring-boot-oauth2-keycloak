@@ -5,3 +5,15 @@ spring:
   docker:
     compose:
       file: ./local-dev/docker-compose.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/sbok-dev
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+jwt:
+  auth:
+    converter:
+      principal-attribute: preferred_username
+      resource-id: sbok-auth-srv
