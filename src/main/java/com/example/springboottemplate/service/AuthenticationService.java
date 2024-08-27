@@ -3,7 +3,6 @@ package com.example.springboottemplate.service;
 import com.example.springboottemplate.config.KeycloakProvider;
 import com.example.springboottemplate.dto.LoginRequestDto;
 import com.example.springboottemplate.dto.RefreshTokenRequestDto;
-import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.ws.rs.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.Keycloak;
@@ -35,8 +34,7 @@ public class AuthenticationService {
         }
     }
 
-    public JsonNode refreshToken(RefreshTokenRequestDto refreshToken) {
-        Keycloak keycloak = keycloakProvider.getInstance();
+    public AccessTokenResponse refreshToken(RefreshTokenRequestDto refreshToken) {
         return keycloakProvider.refreshToken(refreshToken);
     }
 

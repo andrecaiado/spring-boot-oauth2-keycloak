@@ -3,12 +3,13 @@ package com.example.springboottemplate.config;
 import com.example.springboottemplate.dto.RefreshTokenRequestDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.keycloak.OAuth2Constants;
-import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -29,18 +30,6 @@ public class KeycloakProvider {
     @Value("${keycloak.clientSecret}")
     private String clientSecret;
 
-    private static final Keycloak keycloak = null;
-
-    public Keycloak getInstance() {
-        return KeycloakBuilder.builder()
-                .serverUrl(serverUrl)
-                .realm(realm)
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-                .build();
-    }
-
     public KeycloakBuilder newKeycloakBuilderWithPasswordCredentials(String username, String password) {
         return KeycloakBuilder.builder()
                 .serverUrl(serverUrl)
@@ -52,7 +41,8 @@ public class KeycloakProvider {
                 .password(password);
     }
 
-    public JsonNode refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) {
+    public AccessTokenResponse refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) {
+
         RestTemplate restTemplate = new RestTemplate();
 
         String url = serverUrl + "/realms/" + realm + "/protocol/openid-connect/token";
@@ -60,7 +50,7 @@ public class KeycloakProvider {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("client_id", clientId);
         map.add("client_secret", clientSecret);
         map.add("refresh_token", refreshTokenRequestDto.getRefreshToken());
@@ -68,7 +58,21 @@ public class KeycloakProvider {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-        return restTemplate.postForEntity(url, request, JsonNode.class).getBody();
+        return restTemplate.postForEntity(url, request, AccessTokenResponse.class).getBody();
+    }
+
+    public JsonNode getUserInfo(String bearerToken) {
+
+        String url = serverUrl + "/realms/" + realm + "/protocol/openid-connect/userinfo";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(bearerToken);
+
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        return restTemplate.exchange(url, HttpMethod.GET, request, JsonNode.class).getBody();
     }
 
 }
