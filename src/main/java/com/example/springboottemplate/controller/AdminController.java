@@ -2,7 +2,6 @@ package com.example.springboottemplate.controller;
 
 import com.example.springboottemplate.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
