@@ -1,0 +1,288 @@
+{
+	"info": {
+		"_postman_id": "590094f1-55ab-4d58-bb31-954bdfc6bf26",
+		"name": "Spring Boot oauth2 keycloak",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4423866"
+	},
+	"item": [
+		{
+			"name": "Login keycloak",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "sbok-auth-srv",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "p201PFVJpK5a5jRkkKcwzYZvO7Yc0lUT",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/realms/sbok-dev/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"sbok-dev",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh token keycloak",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "client_id",
+							"value": "sbok-auth-srv",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "p201PFVJpK5a5jRkkKcwzYZvO7Yc0lUT",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmZTE1ZGRmMy1mNjc2LTQ1YjAtYjYyOC0xNDEzNGIzZGJkZTEifQ.eyJleHAiOjE3MjQ3NzQ0MDksImlhdCI6MTcyNDc3MjYwOSwianRpIjoiZDIyZTE1NGQtYjc2MS00MTg0LWIxYTMtZDdmYzk5YTdhZjkxIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9zYm9rLWRldiIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9yZWFsbXMvc2Jvay1kZXYiLCJzdWIiOiJmYjNjMjNkNC05ODYwLTRhNTUtYWJhYi0yOTJiMjJlZjY0NWYiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoic2Jvay1hdXRoLXNydiIsInNlc3Npb25fc3RhdGUiOiI2ZDNkOTNiZC1hYzUxLTRjNzctODdkNy1iMmM1NmJmOWMzNWMiLCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJzaWQiOiI2ZDNkOTNiZC1hYzUxLTRjNzctODdkNy1iMmM1NmJmOWMzNWMifQ.CslHaZqOl_V0uB8W3ZXYUZxEwdfaT17aXCpq983fjsI",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "john",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/realms/sbok-dev/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"sbok-dev",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh token API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmZTE1ZGRmMy1mNjc2LTQ1YjAtYjYyOC0xNDEzNGIzZGJkZTEifQ.eyJleHAiOjE3MjQ3ODg1MDYsImlhdCI6MTcyNDc4NjcwNiwianRpIjoiYmFiNzk0NmYtMjZkMC00MzY0LTlkYjUtMGEzYmI1OTg2YWZlIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9zYm9rLWRldiIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9yZWFsbXMvc2Jvay1kZXYiLCJzdWIiOiJmYjNjMjNkNC05ODYwLTRhNTUtYWJhYi0yOTJiMjJlZjY0NWYiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoic2Jvay1hdXRoLXNydiIsInNlc3Npb25fc3RhdGUiOiI3ZDc1NGI1Yi0xMmFiLTQ5YTQtOGQ0MS01MDU1MzNkN2I3OTgiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwic2lkIjoiN2Q3NTRiNWItMTJhYi00OWE0LThkNDEtNTA1NTMzZDdiNzk4In0.ohRWBHm7Chfoc_eWDfz1RKWw4yGvAtMoFAMd_ZaFhBg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/auth/refresh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user info keycloak",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJXMUNBQmxxRVNBYm14eTEyMlo3OXlUa0ZtQkhlWEJxbHhVNnY2NUtMMEE4In0.eyJleHAiOjE3MjQ3NzY4MDAsImlhdCI6MTcyNDc3NjUwMCwianRpIjoiODQ2YTgwMGYtOTNmZC00YmIwLWE5NWUtZmI5NGMwZGUxYjdiIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9zYm9rLWRldiIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJmYjNjMjNkNC05ODYwLTRhNTUtYWJhYi0yOTJiMjJlZjY0NWYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJzYm9rLWF1dGgtc3J2Iiwic2Vzc2lvbl9zdGF0ZSI6IjRiYTQyN2NjLTViNzYtNGJlMy05NjAyLTViMDI3MDk2OWJkYyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiIsImRlZmF1bHQtcm9sZXMtc2Jvay1kZXYiLCJ1c2VyIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInNpZCI6IjRiYTQyN2NjLTViNzYtNGJlMy05NjAyLTViMDI3MDk2OWJkYyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiSm9obiBTbWl0aCIsInByZWZlcnJlZF91c2VybmFtZSI6ImpvaG4iLCJnaXZlbl9uYW1lIjoiSm9obiIsImZhbWlseV9uYW1lIjoiU21pdGgifQ.STenIz1ZkJfcRVSykrVWOQFZG2YUDSpA2M6y-aj4HGnmG24uxLXlPMmAvsr65LIyal1CIKEyIfLt9fcA2Y2M5yJ6yTsW82fdSdSEo0dPwefBo_MXbNPvMYosCFIR0xjghUQOIhu_8hBUVM_OKtdBbBG1V2ZCrFh_CCwT_IUKnx4iWchspYw41KRE1T4uJlXhXDyn1b1mePR9bG8I4fox03bUbeX7UK8amjSgVJoU7R3ikTJCGX1F129O5RxJUcQgdL7q-MGuJm0dmuFrgkDSEAr0SzooDmBhYoy6oRV0cxX257dDjaxcflBOFCbzzYVbN-tHfksh994h93FMQSc9nw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/realms/sbok-dev/protocol/openid-connect/userinfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realms",
+						"sbok-dev",
+						"protocol",
+						"openid-connect",
+						"userinfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user info API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJXMUNBQmxxRVNBYm14eTEyMlo3OXlUa0ZtQkhlWEJxbHhVNnY2NUtMMEE4In0.eyJleHAiOjE3MjQ3ODcwMDYsImlhdCI6MTcyNDc4NjcwNiwianRpIjoiMTk2OTY2NjItMjgwMS00N2FmLTgwZjctZmNhODBmZmNhMmMyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9zYm9rLWRldiIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJmYjNjMjNkNC05ODYwLTRhNTUtYWJhYi0yOTJiMjJlZjY0NWYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJzYm9rLWF1dGgtc3J2Iiwic2Vzc2lvbl9zdGF0ZSI6IjdkNzU0YjViLTEyYWItNDlhNC04ZDQxLTUwNTUzM2Q3Yjc5OCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiIsImRlZmF1bHQtcm9sZXMtc2Jvay1kZXYiLCJ1c2VyIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInNpZCI6IjdkNzU0YjViLTEyYWItNDlhNC04ZDQxLTUwNTUzM2Q3Yjc5OCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiSm9obiBTbWl0aCIsInByZWZlcnJlZF91c2VybmFtZSI6ImpvaG4iLCJnaXZlbl9uYW1lIjoiSm9obiIsImZhbWlseV9uYW1lIjoiU21pdGgifQ.mNgYlaH13mR3QpxMes4YNFMQmXVRj4CgAXzmQYMenvHOLYdq6s6S1fCCARVlIyqTreBpcctoHXP0RvUeUTLunuuBtVScvNoGf2sfepgDrWbbsrfgtKyZcprJSD8cq-XrwmEViPmdcV4DL0LbqHC1hVdKiv_1rL_ZNXr0J2srysW06ODjFXA0EA14vhU527QWHnRplg-Wqem0oXP1y9LOQaKbP5mvfog2TC1SsnmbMf1WyvYaSaA6qzhyOcKdZ3hNjAgC1ZeULLBvEJC6EaQk1edV2LzLWrkVZFJvA_KgmnvYHA6BeFbMzGVnrjvqH6ksnt2mby63AP0J6aTwcEGzpQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/v1/user/info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get admin info API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJXMUNBQmxxRVNBYm14eTEyMlo3OXlUa0ZtQkhlWEJxbHhVNnY2NUtMMEE4In0.eyJleHAiOjE3MjQ3ODcwNTEsImlhdCI6MTcyNDc4Njc1MSwianRpIjoiNzJiZDc3MDUtMzA3NS00OTI1LWEyMTctOWRmNzcyZmNjMjAwIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9zYm9rLWRldiIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJiYWNmZGM0Zi1lMzY1LTRjZWMtOWUxOS1kYWRmYzgwMGRlMWQiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJzYm9rLWF1dGgtc3J2Iiwic2Vzc2lvbl9zdGF0ZSI6ImRhMWQ1Nzc3LTNlNTItNDQ4YS1hZmZlLTk1ZTFkN2I5YmU2ZiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJhZG1pbiIsInVtYV9hdXRob3JpemF0aW9uIiwiZGVmYXVsdC1yb2xlcy1zYm9rLWRldiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJzaWQiOiJkYTFkNTc3Ny0zZTUyLTQ0OGEtYWZmZS05NWUxZDdiOWJlNmYiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWRtaW4ifQ.rm7AbXNUMw-VXcfTqGkazu2xcdUI7XqmNJtCgGkzlV1qDdR4dZEEsUG4_ENOGkoF7xF7s2n8W1j3Y0fH2CZS6_v2f6QyQTLD0MU20TeR284_sFPOjjTn8sp_qjwXTEISVeu4fntfwyBEOnq6lzsOHbdVEntS3sVoEkJdL9tDu-7OUNTcINuwb8wu9jJzN_VLGBL4DtdrjZpSwx5rhE3IrnG8rDzCmNhVTwem-fM7Ke6bXg2U-jECXGcnJ2USscDpK1G7F3wfpscRvhXFakZWnVQnnNVb3LNw2WzxhdWviO0KFxZ6fla61voxH6co4sDlvIv7lmlrj0qpvdjtCnX68g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/v1/admin/info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"admin",
+						"info"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

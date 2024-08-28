@@ -8,6 +8,7 @@ A Spring Boot demo project that provides authentication and authorization throug
 - [Requirements](#requirements)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
+  - [About the `.env` file](#about-the-env-file)
   - [Accessing and managing Keycloak](#accessing-and-managing-keycloak)
 - [Keycloak Configuration](#keycloak-configuration)
   - [Importing the realm configuration](#importing-the-realm-configuration)
@@ -17,6 +18,7 @@ A Spring Boot demo project that provides authentication and authorization throug
   - [Role based authorization](#role-based-authorization)
     - [Enable method security](#enable-method-security)
     - [Extract roles from the JWT token](#extract-roles-from-the-jwt-token)
+  - [Endpoints](#endpoints)
 
 # Features
 - Configures and runs a Keycloak server in a Docker container
@@ -61,6 +63,19 @@ cd your-repository-name
 ./mvnw spring-boot:run
 ```
 
+## About the `.env` file
+> The best practices recommend not to store sensitive information in the source code or other project files, e.g., the `.env` file.
+>
+> One usually follows the following steps to secure sensitive information contained in the `.env` file:
+>
+> - Add the `.env` file to the `.gitignore` file to prevent it from being committed to the repository.
+>
+> - Provide a `.env` template file with empty values and instructions on how to fill it.
+>
+> For the sake of simplicity of this example project and because some of the sensitive data is provided in the [sbok-dev-realm.json](local-dev%2Fsbok-dev-realm.json), the above steps were not followed.
+> 
+> Of course, if you are going to use this project in a production environment, please follow the best practices and change the sensitive data accordingly.
+
 ## Accessing and managing Keycloak
 
 When running the application, Keycloak will be available at `http://localhost:8080/auth`. The default credentials are:
@@ -88,7 +103,7 @@ To export all settings, including the users, the following command was executed 
 /opt/keycloak/bin/kc.sh export --dir /opt/keycloak/data/import --users realm_file --realm sbok-dev
 ```
 
-The configurations are the following:
+The configurations contained in the exported file are:
 
 - Realm: `sbok-dev`
 - Client: `sbok-auth-srv`
@@ -97,11 +112,31 @@ The configurations are the following:
   - `john`:
     - Username: `john`
     - Password: `password`
-    - Roles: `user`
+    - Realm roles assigned: `user`
   - `admin`:
     - Username: `admin`
     - Password: `admin`
-    - Roles: `admin`
+    - Realm roles assigned: `admin`
+
+**Solve the issue that impacts the userinfo endpoint**
+
+To solve the issue that impacts the userinfo endpoint (returning http status code 403), the following steps were taken:
+
+1. Access the Keycloak admin console
+2. Switch to the `sbok-dev` realm
+3. Click on `Clients scopes` in left menu
+4. Create a client scope with the following settings:
+   - Name: `openid`
+   - Assign type: `Default`
+   - Protocol: `OpenID Connect`
+5. Click on `Clients` in left menu and select the `sbok-auth-srv` client in the list
+6. Navigate to the `Client Scopes` tab
+7. Add the `openid` client scope to the assigned scopes
+
+The above steps were taken based on the following discussion:
+- https://keycloak.discourse.group/t/issue-on-userinfo-endpoint-at-keycloak-20/18461
+
+These steps that fix the issue are also included in the exported realm configuration file.
 
 ## Importing the realm configuration
 
@@ -177,9 +212,11 @@ spring:
   oauth2:
     resourceserver:
       jwt:
-        issuer-uri: http://localhost:8080/realms/sbok-dev
+        issuer-uri: ${KEYCLOAK_URL}/realms/sbok-dev
         jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 ```
+
+Some properties are loaded from the .env file.
 
 Once again, please refer to the [OpenID Endpoint Configuration URL](http://localhost:8080/realms/sbok-dev/.well-known/openid-configuration) to get the necessary URIs.
 
@@ -204,13 +241,20 @@ Add the `@PreAuthorize` annotation to the methods that need authorization:
 
 ```java
 @RestController
-@RequestMapping("/api/v1")
-public class ProtectedResourceController {
+@RequestMapping("/api/v1/user")
+public class UserController {
 
-  @GetMapping("/protected")
-  @PreAuthorize("hasRole('admin')")
-  public ResponseEntity<String> getProtectedResource() {
-    return ResponseEntity.ok("This is a protected resource");
+  private final UserService userService;
+
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
+
+  @GetMapping("/info")
+  @PreAuthorize("hasRole('user')")
+  public ResponseEntity<JsonNode> getUserInfo(@RequestHeader("Authorization") String bearerToken) {
+    bearerToken = bearerToken.replace("Bearer ", "");
+    return ResponseEntity.ok(userService.getUserInfo(bearerToken));
   }
 }
 ```
@@ -223,10 +267,13 @@ The roles are extracted from the `realm_access` and `resource_access` claims of 
 
 The `JwtAuthenticationConverter` is defined in the [JwtAuthConverter.java](src%2Fmain%2Fjava%2Fcom%2Fexample%2Fspringboottemplate%2Fsecurity%2FJwtAuthConverter.java) class.
 
-# Endpoints and services
+## Endpoints
 
 The project provides the following endpoints:
 
-- `/api/v1/authenticate/login`: Authenticates a user and returns the access token
-- `/api/v1/authenticate/refresh`: Refreshes the access token
-- `/api/v1/user`: Returns the user information
+- `/api/v1/auth/login`: Authenticates a user and returns the access token
+- `/api/v1/auth/refresh`: Refreshes the access token
+- `/api/v1/user/info`: Returns the user information (users with role `user`)
+- `/api/v1/admin/info`: Returns a protected resource (users with role `admin`)
+
+A [postman collection](local-dev/spring-boot-oauth2-keycloak.postman_collection.json) is provided to test the endpoints.
