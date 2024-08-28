@@ -136,7 +136,7 @@ To solve the issue that impacts the userinfo endpoint (returning http status cod
 The above steps were taken based on the following discussion:
 - https://keycloak.discourse.group/t/issue-on-userinfo-endpoint-at-keycloak-20/18461
 
-These steps that fix the issue are also included in the exported realm configuration file.
+These steps are also included in the exported Keycloak configuration file.
 
 ## Importing the realm configuration
 
