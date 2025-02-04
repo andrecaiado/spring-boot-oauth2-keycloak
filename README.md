@@ -42,7 +42,7 @@ This section provides a step-by-step guide on how to run the project.
 1. Clone the repository by executing the following command:
 
 ```shell
-git clone git@github.com:andrecaiado/spring-boot-oauth2-keycloak.git
+git clone https://github.com/andrecaiado/spring-boot-oauth2-keycloak.git
 ```
 
 2. Navigate into the project directory:
